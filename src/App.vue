@@ -58,21 +58,60 @@ onMounted(() =>{
 </script>
 
 <template>
-
-  <div class="columns">
-    <div class="column">
-      teste
-    </div>
-    <div class="column">
-      <input class="input is-primary" type="text" placeholder="Primary input">
-    </div>
-    <div class="column">
-      teste
-    </div>
-  </div>
-
+  <main class="column is-half is-offset-one-quarter">
+    <header class="column is-half is-offset-one-third">
+        <h1 class="title">Anime tracker</h1>
+    </header>
+    <section class="columns p-4">
+      <div class="column is-four-fifths">
+        <form @submit.prevent="searchAnime">
+          <input 
+            class="input is-primary" 
+            type="text" 
+            placeholder="Pesquisar Anime"
+            v-model="query"
+            @input="handleInput"
+          />
+        </form>
+      </div>
+      <div class="column">
+        <button class="button is-primary">Pesquisar</button>
+      </div>
+    </section>
+  </main>
+  <footer class="waves">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#00cba9" fill-opacity="1" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,245,1152,250.7C1248,256,1344,288,1392,304L1440,320L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+  </footer>
 </template>
 
 <style scoped>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
 
+  body{
+    font-family: 'Roboto', sans-serif;
+    background-image: url("../public/background.jpg");
+  }
+
+  .title{
+    font-size: 32px;
+  }
+
+  svg{
+    position: absolute;
+    bottom: 0;
+  }
+
+  ::-webkit-scrollbar{
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track{
+    background: #f1f1f1;
+    border-radius: 25px;
+  }
+  
+  ::-webkit-scrollbar-thumb{
+    background: #1ab394;
+    border-radius: 25px;
+  }
 </style>
