@@ -15,25 +15,25 @@ const searchAnime = () => {
   const url = `https://api.jikan.moe/v4/anime?q=${query.value}`
   fetch(url)
     .then(res => res.json())
-    .then(res => {
-      search_results.value = res.data
+    .then(data => {
+      search_results.value = data.data
     })
 }
 
-const handleInput = e => {
+const handleInput = (e) => {
   if(!e.target.value){
     search_results.value = []
   }
 }
 
-const addAnime = anime => {
+const addAnime = (anime) => {
   search_results.value = []
   query.value = ''
 
   my_anime.value.push({
-    id: anime.mail_id,
+    id: anime.mal_id,
     title: anime.title,
-    image: anime.images.jpg,
+    image: anime.images.jpg.image_url,
     total_episodes: anime.episodes, 
     watched_episodes: 0
   })
@@ -41,12 +41,12 @@ const addAnime = anime => {
   localStorage.setItem('my_anime', JSON.stringify(my_anime.value))
 }
 
-const increaseWatch = anime => {
+const increaseWatch = (anime) => {
   anime.watched_episodes ++
   localStorage.setItem('my_anime', JSON.stringify(my_anime.value))
 }
 
-const decreaseWatch = anime => {
+const decreaseWatch = (anime) => {
   anime.watched_episodes --
   localStorage.setItem('my_anime', JSON.stringify(my_anime.value))
 }
@@ -58,13 +58,14 @@ onMounted(() =>{
 </script>
 
 <template>
+  <img class="background" src="/background.jpg" />
   <main class="column is-half is-offset-one-quarter">
-    <header class="column is-half is-offset-one-third">
-        <h1 class="title">Anime tracker</h1>
-    </header>
+    <div class="column is-half is-offset-one-third">
+      <h1 class="title">Anime tracker</h1>
+    </div>
     <section class="columns p-4">
       <div class="column is-four-fifths">
-        <form @submit.prevent="searchAnime">
+        <form class="flex" @submit.prevent="searchAnime">
           <input 
             class="input is-primary" 
             type="text" 
@@ -72,10 +73,17 @@ onMounted(() =>{
             v-model="query"
             @input="handleInput"
           />
+            <button type="submit" class="button is-primary">Pesquisar</button>
         </form>
       </div>
-      <div class="column">
-        <button class="button is-primary">Pesquisar</button>
+
+    </section>
+    <section class="flex-column columns p-4" v-if="search_results.length > 0">
+      <div class="column" v-for="anime in search_results.slice(0,3)">
+        <img :src="anime.images.jpg.image_url" />
+        <div class="details">
+          <h3>{{anime.title}}</h3>
+        </div>
       </div>
     </section>
   </main>
@@ -92,13 +100,39 @@ onMounted(() =>{
     background-image: url("../public/background.jpg");
   }
 
+  .background {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    z-index: -1;
+  }
+
   .title{
     font-size: 32px;
+  }
+
+  .flex{
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .flex-column{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flex-column img{
+    width: 64px;
+  }
+
+  button{
+    margin: 0 25px;
   }
 
   svg{
     position: absolute;
     bottom: 0;
+    z-index: -1;
   }
 
   ::-webkit-scrollbar{
