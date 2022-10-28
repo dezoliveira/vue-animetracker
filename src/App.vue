@@ -58,13 +58,18 @@ onMounted(() =>{
 </script>
 
 <template>
+  <link rel="stylesheet" 
+    href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
+    integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" 
+    crossorigin="anonymous"
+  >
   <img class="background" src="/background.jpg" />
   <main class="column is-half is-offset-one-quarter">
     <div class="column is-half is-offset-one-third">
       <h1 class="title">Anime tracker</h1>
     </div>
-    <section class="columns p-4">
-      <div class="column is-four-fifths">
+    <section class="columns is-half is-offset-one-third p-4">
+      <div class="column">
         <form class="flex" @submit.prevent="searchAnime">
           <input 
             class="input is-primary" 
@@ -73,16 +78,20 @@ onMounted(() =>{
             v-model="query"
             @input="handleInput"
           />
-            <button type="submit" class="button is-primary">Pesquisar</button>
+            <button type="submit" class="search button is-primary" style="">Pesquisar</button>
         </form>
       </div>
 
     </section>
     <section class="flex-column columns p-4" v-if="search_results.length > 0">
-      <div class="column" v-for="anime in search_results.slice(0,3)">
+      <div class="box anime-box" v-for="anime in search_results.slice(0,2)">
         <img :src="anime.images.jpg.image_url" />
-        <div class="details">
+        <div>
           <h3>{{anime.title}}</h3>
+          <p :title="anime.synopsis" v-if="anime.synopsis">
+            {{  anime.synopsis.slice(0, 100)}}...
+          </p>
+          <button class="add-button button is-primary" @click="addAnime(anime)"><span><i class="fas fa-plus"></i></span></button>
         </div>
       </div>
     </section>
@@ -125,8 +134,18 @@ onMounted(() =>{
     width: 64px;
   }
 
-  button{
-    margin: 0 25px;
+  .search{
+    margin: 0 0 0 25px;
+  }
+
+  .anime-box{
+
+  }
+
+  .add-button{
+    width: 40px;
+    border-radius: 50%;
+    margin: 10px 0;
   }
 
   svg{
