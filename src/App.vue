@@ -1,5 +1,5 @@
 <script setup>
-import {  ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 const query = ref('')
 const my_anime = ref([])
@@ -7,7 +7,7 @@ const search_results = ref([])
 
 const my_anime_asc = computed(() => {
   return my_anime.value.sort((a, b) =>{
-    return a.title.localCompare(b.title)
+    return a.title.localeCompare(b.title)
   })
 })
 
@@ -15,8 +15,8 @@ const searchAnime = () => {
   const url = `https://api.jikan.moe/v4/anime?q=${query.value}`
   fetch(url)
     .then(res => res.json())
-    .then(data => {
-      search_results.value = data.data
+    .then(res => {
+      search_results.value = res.data
     })
 }
 
@@ -26,7 +26,7 @@ const handleInput = (e) => {
   }
 }
 
-const addAnime = (anime) => {
+const addAnime = anime => {
   search_results.value = []
   query.value = ''
 
@@ -91,7 +91,44 @@ onMounted(() =>{
           <p :title="anime.synopsis" v-if="anime.synopsis">
             {{  anime.synopsis.slice(0, 100)}}...
           </p>
-          <button class="add-button button is-primary" @click="addAnime(anime)"><span><i class="fas fa-plus"></i></span></button>
+          <button 
+            class="add-button button is-primary" 
+            @click="addAnime(anime)">
+              <span>
+                <i class="fas fa-plus">
+
+                </i>
+              </span>
+          </button>
+        </div>
+      </div>
+    </section>
+    <section class="flex-column columns p-4">
+      <div v-if="my_anime.length > 0">
+        <h2>My Anime</h2>
+
+        <div v-for="anime in my_anime_asc" class="box anime-box">
+          <img :src="anime.image"/>
+          <h3>{{anime.title}}</h3>
+          <div class="flex is-justify-content-space-between">
+            <span>
+              {{anime.watched_episodes}} / {{anime.total_episodes}}
+            </span>
+            <div>
+              <button
+              class="add-button button is-primary m-1"
+              v-if="anime.total_episodes !== anime.whatched_episodes"
+              @click="increaseWatch(anime)"
+            > +
+            </button>
+            <button
+              class="add-button button is-danger m-1"
+              v-if="anime.total_episodes > 0"
+              @click="increaseWatch(anime)"
+            > -
+            </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -145,7 +182,7 @@ onMounted(() =>{
   .add-button{
     width: 40px;
     border-radius: 50%;
-    margin: 10px 0;
+    margin: 10px 0 0 0;
   }
 
   svg{
