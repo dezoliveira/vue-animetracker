@@ -83,9 +83,9 @@ onMounted(() =>{
       </div>
 
     </section>
-    <section class="flex-column columns p-4" v-if="search_results.length > 0">
-      <div class="box anime-box" v-for="anime in search_results.slice(0,2)">
-        <img :src="anime.images.jpg.image_url" />
+    <section class="flex-column columns box is-centered scrool p-4" v-if="search_results.length > 0">
+      <div class="box anime-box" v-for="anime in search_results.slice(0,10)">
+        <img class="anime-img" :src="anime.images.jpg.image_url" />
         <div>
           <h3>{{anime.title}}</h3>
           <p :title="anime.synopsis" v-if="anime.synopsis">
@@ -107,8 +107,8 @@ onMounted(() =>{
       <div v-if="my_anime.length > 0">
         <h2>My Anime</h2>
 
-        <div v-for="anime in my_anime_asc" class="box anime-box">
-          <img :src="anime.image"/>
+        <div v-for="anime in my_anime_asc" class="box my-anime-box">
+          <img class="my-anime-img" :src="anime.image"/>
           <h3>{{anime.title}}</h3>
           <div class="flex is-justify-content-space-between">
             <span>
@@ -119,14 +119,24 @@ onMounted(() =>{
               class="add-button button is-primary m-1"
               v-if="anime.total_episodes !== anime.whatched_episodes"
               @click="increaseWatch(anime)"
-            > +
-            </button>
-            <button
-              class="add-button button is-danger m-1"
-              v-if="anime.total_episodes > 0"
-              @click="increaseWatch(anime)"
-            > -
-            </button>
+              >
+                <span>
+                  <i class="fas fa-plus">
+
+                  </i>
+                </span>
+              </button>
+              <button
+                class="add-button button is-danger m-1"
+                v-if="anime.total_episodes > 0"
+                @click="decreaseWatch(anime)"
+              > 
+                <span>
+                  <i class="fas fa-minus">
+
+                  </i>
+                </span>
+              </button>
             </div>
           </div>
         </div>
@@ -141,6 +151,10 @@ onMounted(() =>{
 <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
 
+  *{
+
+  }
+
   body{
     font-family: 'Roboto', sans-serif;
     background-image: url("../public/background.jpg");
@@ -150,7 +164,7 @@ onMounted(() =>{
     width: 100%;
     height: 100vh;
     position: absolute;
-    z-index: -1;
+    z-index: -100;
   }
 
   .title{
@@ -175,8 +189,39 @@ onMounted(() =>{
     margin: 0 0 0 25px;
   }
 
-  .anime-box{
+  .my-anime-box{
+    height: 200px;
+  }
 
+  .my-anime-img{
+    border-radius: 5px;
+    height: 80px
+  }
+
+  .scrool{
+    width: 100%;
+    height: 80vh;
+    overflow-y: auto;
+    padding: 8px;
+  }
+  
+  .scrool::-webkit-scrollbar{
+    width: 8px;
+  }
+  
+  .scrool::-webkit-scrollbar-track{
+    background: #f1f1f1;
+    border-radius: 25px;
+  }
+  
+  .scrool::-webkit-scrollbar-thumb{
+    background: #1ab394;
+    border-radius: 25px;
+  }
+  
+  .scrool .dropdown-menu .dropdown-item a:hover{
+    background: #1ab394;
+    color: #fff;
   }
 
   .add-button{
